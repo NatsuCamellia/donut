@@ -11,9 +11,9 @@ void clear_screen()
 	printf("\x1b[2J");
 }
 
-void print_screen()
+void print_screen(float A, float B)
 {
-	printf("print_screen\n");
+	printf("print_screen %f %f\n", A, B);
 }
 
 void hide_cursor()
