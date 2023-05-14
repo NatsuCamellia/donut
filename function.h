@@ -61,6 +61,8 @@ float get_luminance(float theta, float phi, float A, float B) {
 }
  
 void get_output(float L, coordinate pos) {
+    if (pos.x < 0 || pos.x >= width || pos.y < 0 || pos.y >= height)
+        return ;
     // larger ooz means closer to viewer, reset output for closer z
     float ooz = 1 / pos.z ; // one over z
     if(ooz > bestOOZ[pos.y][pos.x]) {
