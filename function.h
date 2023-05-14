@@ -1,72 +1,73 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
- 
+
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
- 
+
 void clear_screen() {
     printf("\x1b[2J");
 }
- 
+
 void print_screen(float A, float B) {
-    printf("print_screen %f %f\n", A, B);
+    // printf("print_screen %f %f\n", A, B);
+    printf("\n");
     for (int j = 0; j < height; j++) {
         for (int i = 0; i < width; i++)
             putchar(output[j][i]);
         putchar('\n');
     }
 }
- 
+
 void hide_cursor() {
     printf("\033[?25l") ;
 }
- 
+
 void reset_cursor() {
     printf("\x1b[H");
 }
- 
+
 void reset_values() {
     memset(output, (int)' ', sizeof(output)) ;
     memset(bestOOZ, 0, sizeof(bestOOZ)) ;
 }
- 
+
 coordinate get_projection(float theta, float phi, float A, float B) {
     float costheta = cos(theta), sintheta = sin(theta);
     float cosphi = cos(phi), sinphi = sin(phi);
     float cosA = cos(A), sinA = sin(A) ;
     float cosB = cos(B), sinB = sin(B) ;
- 
+
     // the x,y coordinate of the circle before revolving
     float circlex = R2 + R1*costheta;
     float circley = R1*sintheta;
- 
+
     // final 3D (x,y,z) coordinate after rotations 
     coordinate pos ;
     float x = circlex*(cosB*cosphi + sinA*sinB*sinphi) - circley*cosA*sinB ; 
     float y = circlex*(sinB*cosphi - sinA*cosB*sinphi) + circley*cosA*cosB ;
     float z = donut_distance + cosA*circlex*sinphi + circley*sinA ;
- 
+
     // (x,y,z) after projection
     pos.x = (int) (width/2 + render_distance*x/z);
     pos.y = (int) (height/2 - render_distance*y/z);
     pos.z = z ;
- 
+
     return pos ;
 }
- 
+
 float get_luminance(float theta, float phi, float A, float B) {
     // calculate luminance, range from -sqrt(2) to +sqrt(2). 
     return cos(phi)*cos(theta)*sin(B) - cos(A)*cos(theta)*sin(phi) - sin(A)*sin(theta) + cos(B)*(cos(A)*sin(theta) - cos(theta)*sin(A)*sin(phi));
 }
- 
+
 char get_pattern(float L) {
     // L is in range of -sqrt(2) to +sqrt(2)
     // luminance_index is now in the range 0..11 (8*sqrt(2) = 11.3)
     int luminance_index = L * 8 ; 
     return pattern[luminance_index] ;
 }
- 
+
 void get_output(float L, coordinate pos) {
     if (pos.x < 0 || pos.x >= width || pos.y < 0 || pos.y >= height || L < 0)
         return ;
@@ -77,5 +78,5 @@ void get_output(float L, coordinate pos) {
         output[pos.y][pos.x] = get_pattern(L) ;
     }
 }
- 
+
 #endif
