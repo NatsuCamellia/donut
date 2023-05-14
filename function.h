@@ -1,4 +1,3 @@
-
 // function.h
 #ifndef FUNCTION_H
 #define FUNCTION_H
@@ -9,12 +8,22 @@
 
 void clear_screen()
 {
-	printf("clear_screen\n");
+	printf("\x1b[2J");
 }
 
 void print_screen()
 {
 	printf("print_screen\n");
+}
+
+void hide_cursor()
+{
+	printf("\033[?25l");
+}
+
+void reset_cursor()
+{
+	printf("\x1b[H");
 }
 
 #endif
