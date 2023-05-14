@@ -16,6 +16,8 @@ const float R2 = 2 ;
 const float donut_distance = 5 ;
 const float render_distance = width*donut_distance*3/(8*(R1+R2));
  
+const char pattern[] = ".,-~:;=!*#$@" ;
+ 
 typedef struct Tcoordinate {
     int x ;
     int y ; 
