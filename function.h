@@ -60,12 +60,22 @@ float get_luminance(float theta, float phi, float A, float B) {
     return cos(phi)*cos(theta)*sin(B) - cos(A)*cos(theta)*sin(phi) - sin(A)*sin(theta) + cos(B)*(cos(A)*sin(theta) - cos(theta)*sin(A)*sin(phi));
 }
  
+char get_pattern(float L) {
+    // L is in range of -sqrt(2) to +sqrt(2)
+    // luminance_index is now in the range 0..11 (8*sqrt(2) = 11.3)
+    int luminance_index = L * 8 ; 
+    return pattern[luminance_index] ;
+}
+ 
 void get_output(float L, coordinate pos) {
+    // check if out of range
+    if (L < 0)
+        return ;
     // larger ooz means closer to viewer, reset output for closer z
     float ooz = 1 / pos.z ; // one over z
     if(ooz > bestOOZ[pos.y][pos.x]) {
         bestOOZ[pos.y][pos.x] = ooz ;
-        output[pos.y][pos.x] = L > 5 ? '@' : '.';
+        output[pos.y][pos.x] = get_pattern(L) ;
     }
 }
  
